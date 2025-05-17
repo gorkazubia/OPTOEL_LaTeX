@@ -1,0 +1,502 @@
+\documentclass[11pt,a4paper]{article}
+
+% -----------------------
+% FONT & ENCODING
+% -----------------------
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath} % Times New Roman text + matching math
+% Load Arial directly by full path:
+\usepackage{fontspec}
+\usepackage{booktabs}
+
+\newfontfamily\segfont[
+    Path        = /System/Library/Fonts/Supplemental/, % where your Arial .ttf lives
+    Extension   = .ttf,                                % all files are .ttf
+    UprightFont  = Arial,                             % picks up Arial.ttf
+]{Arial}                                            % the “family name” is just Arial
+
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}  % ✓
+\newcommand{\xmark}{\ding{55}}  % ✗
+
+% --------------------
+% GRAPHICS & LINKS
+% --------------------
+\usepackage{graphicx}
+\graphicspath{{./}}
+\usepackage{xcolor} % In the preamble, after loading fontspec
+\definecolor{optoelblue}{RGB}{0,104,183} % ← change these numbers to the exact blue you want
+
+% --------------------
+% HEADER SETUP
+% --------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}  % no rule under header
+\fancyhf{}                          % clear all header/footer fields
+
+% three‐column header:
+%  • left  = the small icon (optoel_logo.pdf)
+%  • center= the wordmark graphic (optoel_text.pdf)
+%  • right = the dates, in Segoe UI 9 pt
+%%% 1) Make sure there’s enough room in the header for the tallest box:
+\setlength{\headheight}{1.4cm}   % or a hair more than your logo’s 1.2cm
+
+%%% 2) Redefine your three‐column header using \vtop (top‐aligned boxes):
+\fancyhf{}                        % clear header + footer
+\renewcommand{\headrulewidth}{0pt}
+
+% left:  logo
+\fancyhead[L]{%
+    \makebox[\textwidth][l]{%
+        \vtop{%
+            \hbox{\includegraphics[height=1.2cm]{optoel_logo}}%
+        }%
+    }%
+}
+
+% center: wordmark
+\fancyhead[C]{%
+    \makebox[\textwidth][c]{%
+        \vtop{%
+            \hbox{\includegraphics[height=0.35cm]{optoel_text.pdf}}%
+        }%
+    }%
+}
+
+% right: dates
+\fancyhead[R]{%
+\makebox[\textwidth][r]{%
+\vtop{%
+\hbox{%
+{\segfont\fontsize{9}{11}\selectfont\color{optoelblue}2 – 4 julio 2025}%
+}%
+}%
+}%
+}
+
+
+
+
+% -----------------------
+% PAGE LAYOUT
+% -----------------------
+\usepackage[
+    inner=3.5cm,
+    outer=2.5cm,
+    top=2cm,
+    bottom=1.5cm,
+    includehead, includefoot,
+    headsep=1.5cm,
+    footskip=1.5cm
+]{geometry}
+
+\setlength{\parindent}{0pt}
+% blank headers/footers
+%\pagestyle{empty}
+
+\usepackage{float}
+
+% -----------------------
+% SECTION TITLES
+% -----------------------
+\usepackage{titlesec}
+\renewcommand{\thesection}{\arabic{section}.-}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}.-}
+\renewcommand{\thesubsubsection}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}.-}
+
+\titleformat{\section}
+{\bfseries\fontsize{12pt}{14pt}\selectfont}
+{\thesection}{0.5em}{}
+\titlespacing{\section}{0pt}{*0}{6pt}
+
+\titleformat{\subsection}
+{\bfseries\fontsize{10pt}{12pt}\selectfont}
+{\thesubsection}{0.5em}{}
+\titlespacing{\subsection}{0pt}{*0}{4pt}
+
+\titleformat{\subsubsection}
+{\itshape\fontsize{10pt}{12pt}\selectfont}
+{\thesubsubsection}{0.5em}{}
+\titlespacing{\subsubsection}{0pt}{*0}{4pt}
+
+% -----------------------
+% TWO-COLUMN SETUP
+% -----------------------
+\usepackage{multicol}
+
+% -----------------------
+% CAPTIONS
+% -----------------------
+\usepackage{caption}
+\captionsetup[figure]{font={it,small}, justification=justified,labelsep=period}
+\captionsetup[table]{name=Tabla,font={it,small}, justification=centering,labelsep=period}
+
+% -----------------------
+% LISTS & BIBLIOGRAPHY
+% -----------------------
+\usepackage{enumitem}
+% for references at end:
+\newlist{myrefs}{enumerate}{1}
+\setlist[myrefs]{label={[\arabic*]}, leftmargin=0.7cm, itemsep=0pt, parsep=0pt}
+
+% -----------------------
+% HYPERLINKS
+% -----------------------
+\usepackage[colorlinks,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+% -----------------------
+% CUSTOM TITLE/AUTHORS
+% -----------------------
+\newcommand{\customtitle}[1]{%
+    \begin{center}
+    \bfseries\fontsize{16pt}{20pt}\selectfont #1
+    \end{center}%
+}
+
+\newcommand{\customauthor}[1]{%
+    \begin{center}
+    \fontsize{11pt}{13pt}\selectfont #1
+    \end{center}%
+}
+
+\newenvironment{affiliations}{%
+    \begin{list}{}{%
+        \setlength{\leftmargin}{0.5cm}%
+        \setlength{\rightmargin}{0.5cm}%
+        \setlength{\parsep}{0pt}%
+        \setlength{\itemsep}{0pt}%
+    }%
+    }{%
+    \end{list}%
+}
+
+% -----------------------
+% ABSTRACT BOX (fixed)
+% -----------------------
+\newenvironment{customabstract}{%
+    \setlength{\fboxsep}{12pt}%  % padding inside the box
+    \begin{center}
+        \begin{minipage}{0.9\textwidth}%
+            % inner box is full width minus twice the padding
+                \begin{minipage}{\dimexpr\linewidth-2\fboxsep\relax}%
+                    % heading of the abstract
+                    \bfseries\fontsize{12pt}{14pt}\selectfont ABSTRACT:\par\medskip
+                    % body text at 11~pt
+                    \normalfont\fontsize{11pt}{13pt}\selectfont
+                \end{minipage}%
+        \end{minipage}
+    \end{center}}
+
+
+\usepackage{siunitx}
+\usepackage{multirow}
+\newcommand{\pmark}{+}           % + (math plus)
+\newcommand{\nmark}{-}           % – (math minus)
+\usepackage{tabularx}
+\usepackage{textcomp}
+
+\sisetup{
+    table-number-alignment = center,
+    table-figures-integer = 2,
+    table-figures-decimal = 0}
+
+\DeclareMathOperator{\erf}{erf}
+
+% =======================
+% DOCUMENT START
+% =======================
+\begin{document}
+
+% Title
+    \begin{center}
+        \fontsize{16}{19}\selectfont\bfseries
+        Análisis exhaustivo y modelo simplificado de un sensor de fibra óptica para desplazamiento angular
+\end{center}
+
+% Authors
+\vspace{1em}
+\begin{center}
+\fontsize{11}{13}\selectfont
+Gorka Zubia$^{1}$, \; Joseba Zubia$^{2,3}$, \; Josu Amorebieta$^{4}$, \; Gotzon Aldabaldetreku$^{2}$ y Durana$^{2}$
+\end{center}
+
+% Affiliations
+\begin{enumerate}[leftmargin=0.5cm, rightmargin=0.5cm, label=\arabic*., itemsep=0pt, parsep=4pt]
+\item Dpto. Expresión Gráfica y Proyectos de Ingeniería, Universidad del País Vasco UPV/EHU, Bilbao, 48013, España.
+\item Dpto. Ingeniería de Comunicaciones, Universidad del País Vasco UPV/EHU, Bilbao, 48013, España.
+\item EHU Quantum Center, Universidad del País Vasco UPV/EHU, Bilbao, 48013, España.
+\item Dpto. Matemática Aplicada, Universidad del País Vasco UPV/EHU, Bilbao, 48013, España.
+\begin{center}
+    \vspace{-0.5cm}\textit{Contact:} Gorka Zubia (\href{mailto:gorka.zubia@ehu.eus}{gorka.zubia@ehu.eus})
+\end{center}
+\end{enumerate}
+
+% Abstract box
+\setlength{\fboxsep}{1pt} % space between box and text
+\begin{center}
+\fbox{%
+\begin{minipage}{\textwidth}
+\fontsize{12}{14}\selectfont\bfseries ABSTRACT: \normalfont
+Accurate tilt-angle measurement is vital in applications ranging from aerospace to civil infra structure monitoring, especially under harsh conditions where conventional inclinometers may fail. In this work, we present a comprehensive analytical model for intensity-based optical fiber displacement sensors (OFDS) capable of measuring multi-axis tilt. We model how a beam reflected from an inclined surface couples into arrays of receiving fibers (RF). It relates geometric fiber parameters, numerical aperture (NA), and target distance to predict measured optical power across different tilt angles and directions. It experimentally validated using various fiber bundle configurations: bifurcated, trifurcated, differential, symmetric, and quasi-random 19-fiber collections, demonstrating accurate operation up to $\pm 20^\circ$ tilt over distances up to 15\,mm. Theoretical predictions match well with measurements, revealing that differential fiber configurations suppress noise and eliminate directional ambiguity. Moreover, we demonstrate how multi-fiber geometries discriminate tilt axes and enhance sensitivity through differential measurements. These findings highlight the potential for cost-effective, real-time, multi-axis tilt sensors that can address Industry\,5.0 and advanced physics lab instrumentation needs.
+\\
+\hangindent=0.5cm \hangafter=23\noindent
+\textbf{Keywords:} instrumentation, optical fiber sensors, optical fiber displacement sensor, photonic sensor, structural health monitoring, optical fiber devices.
+\end{minipage}}
+\end{center}
+% Switch to two columns for main text
+% ADD THIS LINE TO REDUCE SPACE
+\vspace{-1\baselineskip} % adjust negative space manually
+\begin{multicols}{2}\raggedcolumns
+\section{Introducción}
+La Industria~5.0 plantea una fabricación más humana, sostenible y resiliente, donde la monitorización avanzada es esencial para integrar máquinas y personas~\cite{european_commission_industry5_2021}. En este contexto, medir con precisión ángulos de inclinación es crucial para monitorización estructural y automatización industrial, pues pequeñas desalineaciones afectan gravemente a la seguridad y el rendimiento, por ejemplo, la monitorización de álabes en turbinas aeroespaciales o la detección temprana de daños en puentes y presas. Estos plantean grandes desafíos a los inclinómetros convencionales (mecánicos o MEMS) debido a condiciones ambientales extremas~\cite{Pan2024}. Los sensores de fibra óptica son ideales en estos entornos por su EMI/EMC, tamaño compacto y sensado remoto~\cite{Sharbirin2019,Wang2023}. Aunque los sensores ópticos tipo redes de Bragg (FBG) y Fabry–Pérot ofrecen alta precisión, requieren sistemas complejos y costosos~\cite{Guo2015,Zhao2016}. Los sensores ópticos basados en intensidad (OFDS) simplifican la medición angular, siendo más económicos al medir la potencia óptica reflejada por superficies inclinadas~\cite{zubia_high-performance_2025,zubia_design_2024,zubia_algorithm_2022}. Sin embargo, usualmente requieren calibraciones empíricas y difícilmente distinguen distintos ejes de inclinación. La últimas mejorado su precisión con geometrías diferenciales y técnicas avanzadas~\cite{Vadapalli2021,shimizu_optical_2019}. Sin embargo, falta un modelo analítico unificado para sensores multieje basados en intensidad, ya que las soluciones actuales dependen de configuraciones complejas o múltiples sensores~\cite{Lee2014,zubia_-depth_2024,zubia_mathematical_2024}. Este trabajo presenta un modelo matemático que relaciona ángulo de inclinación y potencia óptica medida en configuraciones multifibra, evaluando cómo parámetros geométricos, apertura numérica (NA) y distribución espacial afectan la sensibilidad, linealidad y rango. La validación experimental incluye haces bifurcados, trifurcados, diferenciales, simétricos y cuasi-aleatorios, confirmando una precisión de hasta $\pm15^\circ$ en distancias hasta 15~mm. Nuestro diseño trifurcado permite medir simultáneamente distancia y ángulo, eliminando calibraciones individuales por eje y simplificando el sensado en condiciones severas. La estructura del artículo es la siguiente: Primero se deriva el modelo matemático. Luego se describe la validación experimental y se comparan resultados con técnicas existentes. Finalmente, se analizan aplicaciones potenciales y líneas futuras de investigación en sensado angular multieje.
+%---- SECTION
+\section{Modelo matemático}
+\label{sec:5_01}
+\noindent El principio de operación de un sensor angular de fibra óptica (OFDS) se ilustra en la Fig.~\ref{fig:2_01}, donde se presenta el problema general de medición abordado en este trabajo: un haz de fibras ópticas emite luz hacia un objetivo que puede desplazarse en la dirección $z$ e inclinarse en los ángulos $\{\alpha_x,\alpha_y\}$. El sensor requiere capturar las reflexiones a distintas distancias y orientaciones sin necesidad de óptica externa adicional. La luz que emerge de la fibra transmisora (TF) puede describirse mediante un perfil gaussiano. En~\cite{zubia-depth_2024} se presentó el perfil del haz gaussiano en coordenadas polares. Aquí lo reescribimos en coordenadas cartesianas. Si la potencia óptica total incidente es $P_0$ y el radio de la cintura del haz es~\cite{zubia_new_2024},
+\begin{equation}
+    \omega(z)\approx z^2\tan^2\theta_0\quad \text{con } \mathrm{NA} = \sin\theta_0,
+\end{equation}
+%---- FIGURE
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{zubia1}
+    \caption{(a) Montaje experimental típico de un OFDS. (b) Propagación desde el extremo del haz.}
+    \label{fig:2_01}
+\end{figure}
+%---- END FIGURE
+la irradiancia $I(x,y,z)$ a la distancia $z$~\cite{zubia_-depth_2024,zubia_theoretical_2024}:
+\begin{equation}
+    I(z)= \frac{2\,P_0}{\pi\,\omega^2(z)}\exp\!\left(-\frac{2(x^2 + y^2)}{\omega^2(z)}\right).
+    \label{eq:equ1}
+\end{equation}
+
+%---- SUBSECTION
+\subsection{Efecto de la inclinación del espejo y transformación de coordenadas}
+\label{sec:5_01_03}
+
+Al inclinar el espejo un ángulo $\alpha$ alrededor del eje $X$, se generan desplazamientos tanto angulares como lineales en el punto de incidencia del haz en la fibra receptora (RF). Para describir este desplazamiento, resulta conveniente definir un nuevo sistema de coordenadas $\{x_R,y_R,z_R\}$ rotado un ángulo $2\alpha$ con respecto al sistema original $\{x,y,z\}$. Este giro de $2\alpha$ se debe a que, en una reflexión especular, el ángulo reflejado se duplica respecto al ángulo incidente (Fig.~\ref{fig:5_02}). Sea $d$ la posición del centro del espejo inclinado sobre el eje $Y$ en el sistema original. La transformación al sistema rotado (en torno al eje $X$) queda definida por:
+\begin{align}
+    x_R &= x,\\[6pt]
+    y_R &= y \cos 2\alpha - d \sin 2\alpha,\\[6pt]
+    z_R &= d + d \cos 2\alpha + y\sin 2\alpha \approx d\left(1 + \frac{1}{\cos 2\alpha}\right).
+    \label{eq:equ2}
+\end{align}
+%
+%++++ FIGURA
+%
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.5\textwidth]{zubia2}
+    \caption{Definición de los parámetros geométricos del problema. $R$ es la distancia entre la TF y la RF. $r$ es el radio de la RF. $\alpha_x$ es el ángulo de la superficie reflectante respecto al eje $x$. $d$ es la distancia entre las fibras y el espejo para $\alpha_x=0^\circ$. (b) Procedimiento de integración de la señal reflejada en la RF.}
+    \label{fig:5_02}
+\end{figure*}
+%
+%------ FIN DE FIGURA
+%
+\begin{table*}[!]
+    \centering
+    \caption{Resumen de los parámetros geométricos del problema mostrado en la Fig.~\ref{fig:5_02}.}
+    \label{tab:5_01}
+    \begin{tabular}{ll}
+        \hline
+        \textbf{Parámetro} & \textbf{Significado} \\
+        \hline
+        $\alpha_x$ & Ángulo de la superficie reflectante respecto al eje $x$ \\
+        $r$ & Radio de la RF \\
+        $R$ & Distancia entre la TF y la RF \\
+        $d$ & Distancia entre las fibras y el espejo para $\alpha_x=0^\circ$ \\
+        \hline
+    \end{tabular}
+\end{table*}
+\noindent En el sistema rotado, el haz reflejado llega a la RF con un factor adicional $\cos 2\alpha$:
+\begin{equation}
+    I(z)=\frac{2\,P_0 \cos 2\alpha}{\pi\,\omega^2(z_{R})}\exp\!\left(-\frac{2(x^2 + y_R^2)}{\omega^2(z_{R})}\right),
+    \label{eq:equ3}
+\end{equation}
+donde,
+\begin{equation}
+    \omega^2(z_{R})\approx d^2 (1+\cos 2\alpha)^2\frac{\tan^2 \theta_0}{\cos^2(2\alpha)}.
+\end{equation}
+\subsection{Potencia total recolectada}\label{sec:5_01_05}
+Para determinar la potencia total recolectada por la fibra receptora (RF), se integra $I(z)$ sobre la superficie de la RF. Sea $r$ el radio de la RF, que está ubicada a una distancia $R$ del eje de rotación del espejo. Los parámetros geométricos se ilustran en la Fig.~\ref{fig:5_02} y se resumen en la Tabla~\ref{tab:5_01}. \vspace{-0.5\baselineskip}La potencia recibida es la integral doble,
+%
+%---- Ecuación
+%
+\begin{gather}
+    P_{R}(R,\alpha,d) = \Gamma\iint_{R_x} I(x, y, z) , dx , dy
+    \label{eq:equ4}
+\end{gather}
+Entonces,
+%
+%---- Equation
+%
+\begin{align}
+    P_{R}(R,\alpha,d) =
+    \Gamma\dfrac{2P_o \cos^3 2\alpha}{\pi \, d^2 \,\bigl(1 + \cos 2\alpha\bigr)^2 \,\tan^2 \theta_0}
+    \notag\\
+    \times \,\iint_{R_x}\exp\!\Bigl(-\dfrac{2\,x^2 \cos^2 2\alpha}{d^2 \bigl(1 + \cos 2\alpha\bigr)^2 \tan^2 \theta_0}\Bigr) \, dx
+    \notag\\
+    \times \,\iint_{R_x}\,\exp\!\Bigl(-\dfrac{2\,y_R^2 \cos^2 2\alpha}{d^2 \bigl(1 + \cos 2\alpha\bigr)^2 \tan^2 \theta_0}\Bigr)\, dy,
+    \label{eq:equ5}
+\end{align}
+%
+%---- End Equation
+%
+donde $R_x$ indica la región de integración correspondiente al área del receptor y $\Gamma$ es la reflectividad del espejo. Integrando respecto a $x$, se obtiene:
+%
+%---- Equation
+%
+\begin{align}
+    \int_{-\sqrt{r^2 - (y - R)^2}}^{\sqrt{r^2 - (y - R)^2}}
+    \exp\!\Bigl(-\tfrac{2\,x^2 \cos^2 2\alpha}{d^2 \bigl(1 + \cos 2\alpha\bigr)^2 \tan^2 \theta_0}\Bigr)
+    \, dx=\notag\\
+    \int_{-\sqrt{r^2 - (y - R)^2}}^{\sqrt{r^2 - (y - R)^2}} \exp\!\bigl(-a x^2\bigr)\, dx=\notag\\ \frac{\sqrt{\pi} \,\mathrm{erf}\!\bigl(\sqrt{a}\,\sqrt{r^2 - (y - R)^2}\bigr)}{\sqrt{a}},
+    \label{eq:equ6}
+\end{align}
+%
+donde $\mathrm{erf}(\cdot)$ es la función error y
+%
+%---- Ecuación
+%
+\begin{gather}
+    a = \frac{2 \cos^2(2\alpha)}{ d^2 ,\bigl(1+\cos 2\alpha\bigr)^2 ,\tan^2 \theta_0}.\notag
+\end{gather}
+%
+%---- Fin de Ecuación
+%
+
+La integral restante queda:
+%
+%---- Ecuación
+%
+\begin{align}
+    \sqrt{\frac{\pi}{a}}
+    \int_{R-r}^{R+r}
+    \mathrm{erf}!\Bigl(\sqrt{a}\sqrt{r^2 - (y - R)^2} \Bigr)\notag\\
+    \times
+    \exp\!\Bigl(-a(y\cos 2\alpha - d\sin 2\alpha)^2\Bigr)dy.
+    \label{eq:equ7}
+\end{align}
+%
+%---- Fin de Ecuación
+%
+\subsection{Solución aproximada y potencia detectada}
+La integral derivada en Eqs.~\eqref{eq:equ6} y~\eqref{eq:equ7} puede evaluarse numéricamente. Sin embargo, es más conveniente aproximarla para observar explícitamente cómo la potencia detectada depende de distintos parámetros. Aplicando el teorema del valor medio, aproximamos la integral evaluando la irradiancia en el centro de la RF, $y = R$:
+%
+%---- Ecuación
+%
+\begin{align}
+    2r\sqrt{\frac{\pi}{a}}\text{erf}\bigl(\sqrt{a},r\bigr)\notag\\
+    \times
+    \exp\!\Bigl(-a\bigl(R\cos 2\alpha - d\sin 2\alpha\bigr)^2\Bigr).
+    \label{eq:equ8}
+\end{align}
+%
+%---- Fin de Ecuación
+%
+
+Por lo tanto, la potencia recibida en la RF,
+%
+%---- Equation
+%
+\begin{align}
+    P_{R_i}
+    =
+            \frac{2\sqrt{2}\,r\,\Gamma\,P_0\,\cos^2(2\alpha)}{\sqrt{\pi}\,d\,(1+\cos 2\alpha)\,\tan\theta_0}%
+        \;\times\notag\\
+            \mathrm{erf}\!\Bigl(
+            \frac{\sqrt{2}\,r \,\cos 2\alpha}{d\,(1 + \cos 2\alpha)\,\tan \theta_0}
+            \Bigr)%
+    \;\times\notag\\
+            \exp\!\Bigl(
+            -\,\frac{2\,\bigl(R\cos 2\alpha - d\sin 2\alpha\bigr)^2 \cos^2(2\alpha)}
+            {d^2\,(1 + \cos 2\alpha)^2\,\tan^2 \theta_0}%
+            \Bigr)%
+    \,.
+    \label{eq:equ9}
+\end{align}
+%
+%---- End Equation
+%
+%
+%---- Ecuación
+%
+\begin{align}
+    P_{R_i} = f(r,\alpha,d),\times,g(R,\alpha,d).
+    \label{eq:equ10}
+\end{align}
+%
+%---- Fin de Ecuación
+%
+\section{Resultados}\label{sec:5_02}
+En esta sección analizamos las implicaciones del modelo propuesto.
+\subsection{Haz bifurcado}\label{sec:5_02_01}
+La Fig.~\ref{fig:5_04} muestra la respuesta representativa de un haz con una TF y una RF, de acuerdo con la de la Fig.~\ref{fig:5_02}b. Los parámetros son $\text{NA}=0.09$, $r=50\,\mu\text{m}$, $R=600\,\mu\text{m}$, y ángulos de inclinación $\alpha_x\in\{0,20\}^\circ$ en incrementos de $2^\circ$ (véase Fig.~\ref{fig:5_04}a). En la Fig.~\ref{fig:5_04}b se detalla la respuesta para ángulos pequeños, de $0^\circ$ a $2^\circ$, cada $0.2^\circ$.
+La potencia detectada aumenta al inclinar la superficie reflectante; a $20^\circ$ se recibe aproximadamente 60 veces más potencia que a $0^\circ$. La respuesta del haz bifurcado es \emph{bivaluada}; una misma potencia detectada corresponde a dos distancias diferentes, complicando así su uso en diseños de sensores, salvo que se restrinja el rango operativo a una sola región.
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{zubia4}
+    \caption{%
+        Izquierda: potencia recibida por la RF de un haz bifurcado según Ec.~\eqref{eq:equ9} para $\alpha_x$. Los puntos rojos indican la posición del máximo $d_{\text{max}}$ de la potencia $P_{R_i}$. La línea roja discontinua une estos máximos. (a) Respuesta para $\text{NA}=0.09$, $r=50\,\mu$m, $R=600\,\mu$m y $\alpha_x\in\{0,20\}^\circ$. (b) Detalle entre $\alpha_x=0^\circ$ y $2^\circ$ cada $0.2^\circ$. Derecha: (c) Geometría del haz bifurcado simétrico. (d) Relación de potencia detectada $\eta(\alpha_x,d)$ según la Ec.~\eqref{eq:equ13} para $\alpha_x\in\lbrace0,20\rbrace^\circ$, con pasos de $2^\circ$ y $\theta_0=12.71^\circ$, $r=50\,\mu\text{m}$ y $R=600\,\mu\text{m}$.}
+    \label{fig:5_04}
+\end{figure*}
+\subsection{Haz bifurcado simétrico}\label{sec:5_02_02}
+Una forma de obtener una respuesta equilibrada frente a ángulos positivos y negativos es utilizar dos RFs idénticas dispuestas simétricamente respecto a la TF, situadas a $+R$ y $-R$, ver Fig.~\ref{fig:5_04}c. Definimos la responsividad $\eta(\alpha_x,d)$ como,
+\begin{align}
+    \eta(\alpha_x,d) =& \frac{P_{R_2}(-R)}{P_{R_1}(R)}
+    =\notag\\
+    =&\exp\left(-\frac{8\,R\,\sin 2\alpha_x\,\cos^3 2\alpha_x}{d\,(1+\cos 2\alpha_x)^2\tan^2\theta_0}\right).
+    \label{eq:equ13}
+\end{align}
+Una ventaja de esta configuración es la cancelación del ruido común mediante la relación de potencias, proporcionando una respuesta simétrica para rotaciones positivas y negativas.
+%
+% SECTION
+%
+\section{Validación del modelo}\label{sec:5_03}
+Para validar el modelo teórico de la Sec.~\ref{sec:5_01}, diseñamos el montaje experimental de la Fig.~\ref{fig:5_12}. Este consta de siete elementos: una fuente láser Fabry-Perot de sobremesa de 660\,nm (S4FC660, Thorlabs, Newton, NJ, EE.UU.), el haz de fibras, un espejo que actúa como superficie reflectante, na etapa de desplazamiento lineal (X-LSM025A, Zaber, Vancouver, Columbia Británica, Canadá), otra de desplazamiento angular (X-RSM40B-T4A, Zaber), varios fotodetectores (PDA100A-EC, Thorlabs), y una tarjeta de adquisición(DAQ6510, Keithley, Solon, OH, EE.UU.). Para la validación se utilizaron cuatro haces bifurcados con diferentes diámetros de núcleo y número de fibras, además de un haz trifurcado. Tres de estos haces están construidos a partir de dos fibras con diámetros de núcleo de $\{50,\,200,\,600\}\,\mu\text{m}$. Además, incluimos un haz comercial distribuido aleatoriamente (BF19Y2LS02, Thorlabs), con 19 fibras (9-TF y 10-RF), todas con núcleos de 200\,µm y $\mathrm{NA} = 0.22$. En comparación con los haces simples de dos fibras, este diseño proporciona una iluminación más uniforme y recoge más potencia mediante sus 10 RF.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{zubia12}
+    \caption{Sensor angular típico de fibra óptica (OFDS).  Montaje experimental: (1) fuente láser de 660\,nm, (2) haz de fibras ópticas y (6) varios fotodetectores cuadráticos $\text{PD}_i$, encargados de convertir la potencia óptica en señales eléctricas. Estas señales se digitalizan mediante (7) una tarjeta DAQ para su procesamiento. Otros componentes son: (3) un espejo, (4) una etapa lineal y (5) una etapa angular.}
+    \label{fig:5_12}
+\end{figure}
+\section{Resultados}\label{sec:5_04}
+\subsection{Haces bifurcados}
+La Fig.~\ref{fig:5_13}a muestra las medidas de desplazamiento lineal, y la Fig.~\ref{fig:5_13}b, el desplazamiento angular. Observamos una muy buena concordancia entre los resultados experimentales y el modelo teórico desarrollado. En el desplazamiento lineal, apreciamos que la posición del máximo de potencia se desplaza hacia mayores distancias a medida que aumenta la separación TF-RF. El modelo predice una disminución abrupta después del máximo, aunque a grandes distancias la potencia experimental y la teórica convergen asintoticamente. Las diferencias observadas a grandes distancias se deben a dos razones: el haz reflejado se expande más allá del núcleo de la fibra, siendo parcialmente recortado por el revestimiento, lo que disminuye la potencia detectada. También, la excitación de modos superiores en la fibra TF distorsiona el perfil gaussiano ideal del haz, aumentando su divergencia y reduciendo la eficiencia del acoplamiento en la RF. La Fig.~\ref{fig:5_13}b muestra las medidas angulares para diferentes distancias. Se observa una respuesta asimétrica (Sec.~\ref{sec:5_02_01}), con un máximo desplazado hacia ángulos positivos. La potencia detectada disminuye con la distancia y la respuesta se vuelve más simétrica, acercándose el máximo a $\alpha_x = 0^\circ$. Esto ocurre con más rapidez cuanto menor es el tamaño del haz bifurcado. Por ejemplo, para el haz de 50 µm la respuesta se vuelve simétrica a solo 2 mm, mientras que para el de 600 µm se requiere una distancia de 8 mm.
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{zubia13}
+    \caption{Izquierda: respuestas experimentales y teóricas de los tres haces bifurcados con diámetros $\{50,200,600\}$ µm. (a) Distancia para $\alpha_x = 0^\circ$. (b) Ángulo para distancias fijas, con $\alpha_x \in [-25, 25]^\circ$. Derecha: lo mismo pero para el BF19Y2LS02. (c) Respuesta frente a la distancia para $\alpha_x = 0^\circ$. (d) Respuesta frente al ángulo para distancias fijas y $\alpha_x \in [-25,25]^\circ$.}
+    \label{fig:5_13}
+\end{figure*}
+\subsection{Haz bifurcado de 19 fibras}
+La Fig.~\ref{fig:5_13}c muestra los resultados del haz de 19 fibras. En este caso, la coincidencia con el modelo teórico es aún mejor, atribuible al efecto promediador del conjunto de fibras, que minimiza desalineamientos individuales. Gracias a la casi aleatoriedad, la respuesta angular es simétrica, con un máximo centrado en $\alpha_x=0^\circ$. Este haz presenta una sensibilidad inversamente proporcional a la distancia, aunque pierde sensibilidad rápidamente fuera del rango $\alpha_x \in [-10,10]^\circ$. La respuesta sigue siendo bivaluada, lo que impide distinguir el sentido de rotación.
+\subsection{Haz trifurcado}
+Este consta de dos colecciones de RF en $\lbrace R_1 \approx 200,R_2 \approx 400\rbrace$ µm, ver Fig.~\ref{fig:5_15}. La coincidencia con el modelo es buena aunque inferior respecto a los anteriores, debido a que el modelo considera una configuración lineal mientras que la experimental es azimutal. La discrepancia aparece en la zona muerta de la segunda colección RF, que es mayor en el modelo teórico debido a proyecciones más cortas en la estructura concéntrica experimental.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{zubia15}
+    \caption{Respuestas experimentales y teóricas de las dos colecciones RF del haz trifurcado. (a) Distancia para $\alpha_x=0^\circ$. (b) Ángulo $\alpha_x \in [-15,15]^\circ$.}
+    \label{fig:5_15}
+\end{figure}
+%=========================================================
+%
+% SECTION: CONCLUSIONS
+%
+%=========================================================
+\section{Conclusiones}
+En este trabajo se desarrolló y validó experimentalmente un modelo analítico unificado para sensores angulares de fibra óptica (OFAS) basados en intensidad, capaces de medir inclinaciones respecto a uno o más ejes ortogonales. El modelo integra propagación gaussiana, geometría y reflexión, vinculando analíticamente la potencia detectada con los ángulos de inclinación sin recurrir a calibraciones puramente empíricas. Analizamos diversas configuraciones: haces bifurcados simples, simétricos, diferenciales, trifurcados y distribuidos aleatoriamente con 19 fibras. La simetría geométrica y la detección diferencial reducen considerablemente el ruido y la ambigüedad en las medidas. La validación experimental para distancias de hasta 15\,mm y ángulos hasta $\pm20^\circ$ confirma que el modelo describe con precisión el comportamiento tanto angular como dependiente de la distancia. Haces con mayor número de fibras muestran respuestas más estables y menos ambiguas, ideales para la detección multiaxial fiable. En comparación con otros sensores angulares de fibra óptica reportados, nuestro modelo ofrece tres ventajas. Una expresión analítica cerrada para inferir directamente la inclinación. Adaptabilidad flexible a diversas configuraciones de fibras. Mayor rechazo al ruido mediante detección diferencial. Estas características permiten mediciones angulares multieje compactas y fiables, adecuadas para entornos hostiles o con limitaciones de espacio, desde inclinómetros industriales hasta componentes aeroespaciales. Nuestra configuración trifurcada reúne todas estas ventajas, demostradas tanto teórica como experimentalmente.
+
+Como trabajo futuro ampliaremos el modelo a rangos angulares mayores, blancos no especulares y condiciones dinámicas. Además, la integración del procesamiento de datos en tiempo real podría mejorar la resolución y simplificar el hardware.
+
+% =======================
+% REFERENCES
+% =======================
+    \bibliographystyle{IEEEtran}  % o plain, abbrv, alpha…
+    \bibliography{references}     % sin la extensión .bib
+\end{multicols}
+
+\end{document}
