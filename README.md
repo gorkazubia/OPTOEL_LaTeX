@@ -1,21 +1,17 @@
-# PLANTILLA EN LATEX PARA COMUNICACIONES DEL COMITÉ DE OOPTOELECTRÓNICA (OPTOEL) DE LA SOCIEDAD ESPAÑOLA DE ÓPTICA (SEDOPTICA), 
- Análisis exhaustivo y modelo simplificado de un sensor de fibra óptica para desplazamiento angular  
+# PLANTILLA EN LATEX PARA OPTOEL
+ Plantilla en latex para comunicaciones enviadas a Reuniones del Comité de Optoelectrónica (OPTOEL) de la Sociedad Española de Óptica (SEDOPTICA).
 **XIV REUNIÓN OPTOELECTRÓNICA, 2 – 4 julio 2025**  
 
 **Autores:**  
-Gorka Zubia
+Gorka Zubia Garea¹
 ¹ Dpto. Expresión Gráfica y Proyectos de Ingeniería, University of the Basque Country UPV/EHU
 **Contacto:** gorka.zubia@ehu.eus  
 
 ---
 
-## 📖 Resumen  
-
----
-
 ## 📄 Manuscrito
 - `optoel_plantilla.tex` – Fuente LaTeX completa (preambulo con fancyhdr, geometry, newtx, fontspec, etc.)  
-- `Zubia25_OPTOEL.pdf` – Ejemplo de Versión final en PDF  
+- `optoel_plantilla.pdf` – Ejemplo de Versión final en PDF  
 
 ---
 
