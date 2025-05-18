@@ -3,7 +3,7 @@
 **XIV REUNIÓN OPTOELECTRÓNICA, 2 – 4 julio 2025**  
 
 **Autores:**  
-Gorka Zubia Garea¹[![ORCID](https://img.shields.io/badge/orcid-0000-0002 1825 0097-green.svg?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-1825-0097)
+Gorka Zubia Garea¹ [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--1825--0097-green.svg?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-1825-0097)
 
 ¹ Dpto. Expresión Gráfica y Proyectos de Ingeniería, University of the Basque Country UPV/EHU
 
